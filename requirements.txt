@@ -4,3 +4,4 @@ datasets<3.0.0
 scikit-learn
 deepspeed
 wandb
+evo2 @ git+https://github.com/arcinstitute/evo2.git
