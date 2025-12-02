@@ -21,12 +21,18 @@ MODEL_DISPLAY_NAMES = {
     "evo-1-131k-base": "Evo-7B",
     "evo2_1b_base": "Evo2-1B",
     "evo2_7b_base": "Evo2-7B",
+    "Qwen_Qwen3-4B-Base": "Qwen3-4B (LLM)",
+    "Qwen_Qwen3-14B-Base": "Qwen3-14B (LLM)",
+    "Qwen_Qwen3-30B-A3B-Base": "Qwen3-30B (LLM)",
 }
 
 def extract_model_name(filename):
     """Extract model name from parquet filename."""
-    # Remove _bfloat16.parquet or _float32.parquet
-    name = filename.replace("_bfloat16.parquet", "").replace("_float32.parquet", "")
+    # Remove .parquet extension
+    name = filename.replace(".parquet", "")
+
+    # Remove _bfloat16 or _float32 suffix
+    name = name.replace("_bfloat16", "").replace("_float32", "")
 
     # Map to display name
     for key, display_name in MODEL_DISPLAY_NAMES.items():
@@ -77,6 +83,9 @@ def plot_sequence_recovery(data_type, output_path):
         "GENERator-3B": "#5A9A7A",
         "GENERator-v2-1B": "#7BA7C7",
         "GENERator-v2-3B": "#2E5C7F",
+        "Qwen3-4B (LLM)": "#E8B4B8",
+        "Qwen3-14B (LLM)": "#D88A8F",
+        "Qwen3-30B (LLM)": "#C75E66",
     }
 
     # Hatching patterns
@@ -88,10 +97,14 @@ def plot_sequence_recovery(data_type, output_path):
         "GENERator-3B": "\\\\\\",
         "GENERator-v2-1B": "///",
         "GENERator-v2-3B": "///",
+        "Qwen3-4B (LLM)": "...",
+        "Qwen3-14B (LLM)": "...",
+        "Qwen3-30B (LLM)": "...",
     }
 
-    # Sort models in desired order
-    model_order = ["Evo-7B", "Evo2-1B", "Evo2-7B", "GENERator-1B", "GENERator-3B", "GENERator-v2-1B", "GENERator-v2-3B"]
+    # Sort models in desired order (LLM baselines at the end)
+    model_order = ["Evo-7B", "Evo2-1B", "Evo2-7B", "GENERator-1B", "GENERator-3B", "GENERator-v2-1B", "GENERator-v2-3B",
+                    "Qwen3-4B (LLM)", "Qwen3-14B (LLM)", "Qwen3-30B (LLM)"]
     available_models = [m for m in model_order if m in df_combined.columns]
     df_combined = df_combined[available_models]
 
